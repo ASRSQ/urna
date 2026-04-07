@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-dark bg-dark mb-4 no-print">
     <div class="container">
 
         <!-- LOGO -->

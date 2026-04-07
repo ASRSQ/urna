@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vote;
+use App\Models\ResultFilter;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,22 +53,79 @@ class VoteController extends Controller
 }
 
     // 📊 Resultado da eleição
-    public function results($election_id)
-    {
-        $tickets = \App\Models\Ticket::where('election_id', $election_id)
-            ->withCount('votes')
-            ->orderByDesc('votes_count')
+// 📊 Resultado da eleição
+
+public function results(Request $request, $id)
+{
+    // 🟢 RESULTADO GERAL (SEM FILTRO)
+    $baseQuery = Vote::where('election_id', $id);
+
+    $data = [
+        'validos' => (clone $baseQuery)->valid()->count(),
+        'brancos' => (clone $baseQuery)->blank()->count(),
+        'nulos' => (clone $baseQuery)->nullVotes()->count(),
+
+        'chapas' => (clone $baseQuery)
+            ->valid()
+            ->selectRaw('ticket_id, count(*) as total')
+            ->groupBy('ticket_id')
+            ->with('ticket')
+            ->orderByDesc('total') // 🔥 ranking geral
+            ->get()
+    ];
+
+    // 🔵 SALVAR FILTRO (SEM DUPLICAR)
+    if ($request->start && $request->end && $request->label) {
+
+        ResultFilter::firstOrCreate([
+            'election_id' => $id,
+            'label' => $request->label,
+            'start' => $request->start,
+            'end' => $request->end
+        ]);
+    }
+
+    // 🔥 SUB-RESULTADOS
+    $filters = ResultFilter::where('election_id', $id)
+        ->orderBy('start')
+        ->get();
+
+    $subResultados = [];
+
+    foreach ($filters as $filtro) {
+
+        $q = Vote::where('election_id', $id)
+            ->whereBetween('created_at', [$filtro->start, $filtro->end]);
+
+        // 🏆 RANKING POR CHAPA NO FILTRO
+        $chapas = (clone $q)
+            ->valid()
+            ->selectRaw('ticket_id, count(*) as total')
+            ->groupBy('ticket_id')
+            ->with('ticket')
+            ->orderByDesc('total')
             ->get();
 
-        $blankVotes = Vote::where('election_id', $election_id)
-            ->where('blank', true)
-            ->count();
+        $subResultados[] = [
+            'id' => $filtro->id, // 🔥 importante pro delete
+            'label' => $filtro->label,
+            'start' => $filtro->start,
+            'end' => $filtro->end,
 
-        $nullVotes = Vote::where('election_id', $election_id)
-            ->whereNull('ticket_id')
-            ->where('blank', false)
-            ->count();
+            'validos' => (clone $q)->valid()->count(),
+            'brancos' => (clone $q)->blank()->count(),
+            'nulos' => (clone $q)->nullVotes()->count(),
 
-        return view('results.index', compact('tickets', 'blankVotes', 'nullVotes'));
+            'chapas' => $chapas // 🔥 ranking incluído
+        ];
+    }
+
+    return view('votes.results', compact('data', 'subResultados'));
+}
+public function destroy_filtro($id)
+    {
+        ResultFilter::findOrFail($id)->delete();
+
+        return back()->with('success', 'Filtro removido!');
     }
 }

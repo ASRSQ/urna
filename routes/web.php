@@ -17,6 +17,7 @@ Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);
 // votação
 Route::post('/vote', [VoteController::class, 'store']);
 Route::get('/results/{id}', [VoteController::class, 'results']);
+Route::delete('/filters/{id}', [VoteController::class, 'destroy_filtro'])->name('filters.destroy');
 
 // API urna
 Route::get('/api/election/{id}', [ElectionApiController::class, 'show']);
