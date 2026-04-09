@@ -10,7 +10,12 @@ const rVice = document.querySelector('#vice')
 const imgCandidato = document.querySelector('#foto')
 const imgVice = document.querySelector('#fotoVice')
 
-
+// ==============================
+// SONS
+// ==============================
+const somTecla = new Audio(`${window.location.origin}/urna-gremio/public/audio/se1.mp3`)
+const somErro = new Audio(`${window.location.origin}/urna-gremio/public/audio/se2.mp3`)
+const somConfirma = new Audio(`${window.location.origin}/urna-gremio/public/audio/se3.mp3`)
 // ==============================
 // VARIÁVEIS
 // ==============================
@@ -24,7 +29,7 @@ let votoEmBranco = false
 // ==============================
 window.addEventListener('DOMContentLoaded', () => {
 
-  fetch(`${window.location.origin}${window.location.pathname.split('/urna')[0]}/urna-gremio/public/api/election/${ELECTION_ID}`)
+  fetch(`${BASE_URL}/api/election/${ELECTION_ID}`)
     .then(res => res.json())
     .then(data => {
       console.log('API:', data)
@@ -71,6 +76,9 @@ function comecarEtapa() {
 // DIGITAR
 // ==============================
 function clicou(valor) {
+
+  somTecla.currentTime = 0
+  somTecla.play()
 
   let el = document.querySelector('.numero.pisca')
 
@@ -131,6 +139,10 @@ function atualizarInterface() {
 // ==============================
 function branco() {
   if (numeroDigitado === '') {
+
+    somTecla.currentTime = 0
+    somTecla.play()
+
     votoEmBranco = true
     numeros.innerHTML = ''
     rMensagem.innerHTML = 'VOTO EM BRANCO'
@@ -143,6 +155,10 @@ function branco() {
 // CORRIGE
 // ==============================
 function corrige() {
+
+  somErro.currentTime = 0
+  somErro.play()
+
   comecarEtapa()
 }
 
@@ -153,8 +169,12 @@ function confirma() {
 
   let etapa = etapas[etapaAtual]
 
-  // ⚪ VOTO EM BRANCO (BOTÃO)
+  // ⚪ BRANCO
   if (votoEmBranco) {
+
+    somConfirma.currentTime = 0
+    somConfirma.play()
+
     enviarVoto(null, true)
     return
   }
@@ -163,16 +183,23 @@ function confirma() {
 
     let candidato = etapa.candidatos[numeroDigitado]
 
-    // ✅ VOTO VÁLIDO
+    somConfirma.currentTime = 0
+    somConfirma.play()
+
+    // ✅ válido
     if (candidato) {
       enviarVoto(candidato.id, false)
     } 
-    // ❌ VOTO NULO (digitou número inválido)
+    // ❌ nulo
     else {
       enviarVoto(null, false)
     }
 
   } else {
+
+    somErro.currentTime = 0
+    somErro.play()
+
     alert('Voto inválido')
   }
 }
