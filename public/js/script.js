@@ -13,9 +13,9 @@ const imgVice = document.querySelector('#fotoVice')
 // ==============================
 // SONS
 // ==============================
-const somTecla = new Audio(`${window.location.origin}/urna-gremio/public/audio/se1.mp3`)
-const somErro = new Audio(`${window.location.origin}/urna-gremio/public/audio/se2.mp3`)
-const somConfirma = new Audio(`${window.location.origin}/urna-gremio/public/audio/se3.mp3`)
+const somTecla = new Audio(`${BASE_URL}/audio/se1.mp3`)
+const somErro = new Audio(`${BASE_URL}/audio/se2.mp3`)
+const somConfirma = new Audio(`${BASE_URL}/audio/se3.mp3`)
 // ==============================
 // VARIÁVEIS
 // ==============================
