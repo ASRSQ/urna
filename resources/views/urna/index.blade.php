@@ -65,7 +65,7 @@
           <div class="direita">
             <div class="candidato">
               <div class="imagem">
-                <img id="foto" src="{{ asset('img/placeholder.png') }}" alt="Líder">
+                <img id="foto" src="{{ asset('img/placeholder.jpg') }}" alt="Líder">
               </div>
               <div class="cargo">
                 <p>Líder</p>
@@ -74,7 +74,7 @@
 
             <div class="candidato menor">
               <div class="imagem">
-                <img id="fotoVice" src="{{ asset('img/placeholder.png') }}" alt="Vice">
+                <img id="fotoVice" src="{{ asset('img/placeholder.jpg') }}" alt="Vice">
               </div>
               <div class="cargo">
                 <p>Vice</p>
@@ -137,7 +137,23 @@
 
     </div>
   </div>
+<div id="modalVoter" class="modal">
+  <div class="modal-content">
+    <h2>Identificação</h2>
+    <p>Digite sua matrícula (7 dígitos)</p>
 
+    <input type="text" id="inputVoter" maxlength="7" />
+
+    <button id="btnConfirmar" onclick="confirmarVoter()">Confirmar</button>
+  </div>
+</div>
+<div id="modalAviso" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Atenção</h2>
+    <p>Digite um número, vote nulo ou em branco.</p>
+    <button onclick="fecharAviso()">OK</button>
+  </div>
+</div>
 </body>
 
 </html>

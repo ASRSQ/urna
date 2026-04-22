@@ -23,17 +23,34 @@ let etapas = []
 let etapaAtual = 0
 let numeroDigitado = ''
 let votoEmBranco = false
+let voterId = null
 
 // ==============================
 // INICIAR (QUANDO CARREGAR)
-// ==============================
 window.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('modalVoter')
+  const input = document.getElementById('inputVoter')
+
+  modal.style.display = 'flex'
+
+  if (input) {
+    // 👇 garante foco mesmo com renderização
+    setTimeout(() => {
+      input.focus()
+    }, 100)
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        e.stopPropagation() // 👈 ESSENCIAL
+        confirmarVoter()
+      }
+    })
+  }
 
   fetch(`${BASE_URL}/api/election/${ELECTION_ID}`)
     .then(res => res.json())
     .then(data => {
-      console.log('API:', data)
-
       if (!data || data.length === 0) {
         alert('Nenhuma chapa cadastrada!')
         return
@@ -42,9 +59,47 @@ window.addEventListener('DOMContentLoaded', () => {
       etapas = data
       comecarEtapa()
     })
+})
+document.addEventListener('keydown', (e) => {
+
+  // 👇 se está digitando no input, ignora
+  if (e.target.id === 'inputVoter') return
+
+  const modal = document.getElementById('modalVoter')
+
+  // 🚫 se ainda está no login, não deixa votar
+  if (modal && modal.style.display !== 'none') return
+
+  // 🔢 números
+  if (/^[0-9]$/.test(e.key)) {
+    clicou(e.key)
+  }
+
+  // ⌫ corrigir
+  if (e.key === 'Backspace') {
+    e.preventDefault()
+    corrige()
+  }
+
+  // ⏎ confirmar
+  if (e.key === 'Enter') {
+    confirma()
+  }
 
 })
 
+
+function confirmarVoter() {
+  let input = document.getElementById('inputVoter').value
+
+  if (!/^[0-9]{7}$/.test(input)) {
+    alert('Digite exatamente 7 dígitos')
+    return
+  }
+
+  voterId = input
+  document.getElementById('modalVoter').style.display = 'none'
+}
 // ==============================
 // INICIAR ETAPA
 // ==============================
@@ -60,8 +115,8 @@ function comecarEtapa() {
   rNome.innerHTML = '---'
   rVice.innerHTML = '---'
 
-  imgCandidato.src = '/img/placeholder.png'
-  imgVice.src = '/img/placeholder.png'
+  imgCandidato.src = '/img/placeholder.jpg'
+  imgVice.src = '/img/placeholder.jpg'
 
   let total = etapa.numeros || 2
 
@@ -111,7 +166,7 @@ function atualizarInterface() {
     // FOTO LÍDER
     imgCandidato.src = candidato.foto
       ? `${BASE_URL}/storage/${candidato.foto}`
-      : `${BASE_URL}/img/placeholder.png`
+      : `${BASE_URL}/img/placeholder.jpg`
 
     // VICE
     if (candidato.vice) {
@@ -119,10 +174,10 @@ function atualizarInterface() {
 
       imgVice.src = candidato.vice.foto
         ? `${BASE_URL}/storage/${candidato.vice.foto}`
-        : `${BASE_URL}/img/placeholder.png`
+        : `${BASE_URL}/img/placeholder.jpg`
     } else {
       rVice.innerHTML = '-'
-      imgVice.src = `${BASE_URL}/img/placeholder.png`
+      imgVice.src = `${BASE_URL}/img/placeholder.jpg`
     }
 
   } else {
@@ -130,8 +185,8 @@ function atualizarInterface() {
 
     rNome.innerHTML = '---'
     rVice.innerHTML = '---'
-    imgCandidato.src = `${BASE_URL}/img/placeholder.png`
-    imgVice.src = `${BASE_URL}/img/placeholder.png`
+    imgCandidato.src = `${BASE_URL}/img/placeholder.jpg`
+    imgVice.src = `${BASE_URL}/img/placeholder.jpg`
   }
 }
 // ==============================
@@ -169,9 +224,17 @@ function confirma() {
 
   let etapa = etapas[etapaAtual]
 
-  // ⚪ BRANCO
-  if (votoEmBranco) {
+  // ⚠️ nada digitado e não é branco
+  if (!votoEmBranco && numeroDigitado.length === 0) {
+    somErro.currentTime = 0
+    somErro.play()
 
+    mostrarAviso()
+    return
+  }
+
+  // ⚪ branco
+  if (votoEmBranco) {
     somConfirma.currentTime = 0
     somConfirma.play()
 
@@ -179,6 +242,7 @@ function confirma() {
     return
   }
 
+  // ✅ número completo
   if (numeroDigitado.length === etapa.numeros) {
 
     let candidato = etapa.candidatos[numeroDigitado]
@@ -186,13 +250,10 @@ function confirma() {
     somConfirma.currentTime = 0
     somConfirma.play()
 
-    // ✅ válido
     if (candidato) {
       enviarVoto(candidato.id, false)
-    } 
-    // ❌ nulo
-    else {
-      enviarVoto(null, false)
+    } else {
+      enviarVoto(null, false) // nulo
     }
 
   } else {
@@ -205,10 +266,8 @@ function confirma() {
 }
 function enviarVoto(ticketId, branco) {
 
-  let voterId = prompt("Digite sua matrícula (7 dígitos):")
-
-  if (!voterId || !/^[0-9]{7}$/.test(voterId)) {
-    alert("Código inválido! Use 7 dígitos.")
+  if (!voterId) {
+    alert("Você precisa se identificar antes de votar.")
     return
   }
 
@@ -235,6 +294,16 @@ function enviarVoto(ticketId, branco) {
       return
     }
 
-    document.querySelector('.tela').innerHTML = '<h1>FIM</h1>'
+    document.querySelector('.tela').innerHTML = '<h1 class="fim">FIM</h1>'
   })
+
+
+}
+
+function mostrarAviso() {
+  document.getElementById('modalAviso').style.display = 'flex'
+}
+
+function fecharAviso() {
+  document.getElementById('modalAviso').style.display = 'none'
 }

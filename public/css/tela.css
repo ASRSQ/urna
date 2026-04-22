@@ -102,11 +102,82 @@
   border-top: 2px solid #222222;
 }
 
+
 .tela .fim {
-  flex: 1;
+  font-size: 300px;
+   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 70px;
+  animation: piscar 1s infinite;
+}
+
+@keyframes piscar {
+  0% { opacity: 1 }
+  50% { opacity: 0.3 }
+  100% { opacity: 1 }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+}
+
+/* INPUT */
+#inputVoter {
+  width: 100%;
+  font-size: 22px;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+#inputVoter:focus {
+  border-color: #4CAF50;
+}
+
+/* BOTÃO */
+#btnConfirmar {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
   font-weight: bold;
+  background: linear-gradient(135deg, #4CAF50, #2e7d32);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* HOVER */
+#btnConfirmar:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #43a047, #1b5e20);
+}
+
+/* CLICK */
+#btnConfirmar:active {
+  transform: scale(0.98);
 }
