@@ -22,3 +22,13 @@ Route::delete('/filters/{id}', [VoteController::class, 'destroy_filtro'])->name(
 // API urna
 Route::get('/api/election/{id}', [ElectionApiController::class, 'show']);
 Route::get('/urna/{id}', [UrnaController::class, 'index'])->name('urna');
+
+Route::get('/api/check-voter/{voter}/{election}', function ($voter, $election) {
+    $exists = \App\Models\Vote::where('voter_id', $voter)
+        ->where('election_id', $election)
+        ->exists();
+
+    return response()->json([
+        'used' => $exists
+    ]);
+});

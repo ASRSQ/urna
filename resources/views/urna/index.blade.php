@@ -139,6 +139,12 @@
   </div>
 <div id="modalVoter" class="modal">
   <div class="modal-content">
+       <div id="erroVoter" style="
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+  "></div>
     <h2>Identificação</h2>
     <p>Digite sua matrícula (7 dígitos)</p>
 

@@ -59,6 +59,10 @@ window.addEventListener('DOMContentLoaded', () => {
       etapas = data
       comecarEtapa()
     })
+     input.addEventListener('input', function () {
+      erroBox.innerHTML = ''
+      input.style.border = ''
+    })
 })
 document.addEventListener('keydown', (e) => {
 
@@ -87,18 +91,38 @@ document.addEventListener('keydown', (e) => {
   }
 
 })
-
-
 function confirmarVoter() {
-  let input = document.getElementById('inputVoter').value
+  let inputEl = document.getElementById('inputVoter')
+  let input = inputEl.value
+  let erroBox = document.getElementById('erroVoter')
+
+  // limpa erro anterior
+  erroBox.innerHTML = ''
+  inputEl.style.border = ''
 
   if (!/^[0-9]{7}$/.test(input)) {
-    alert('Digite exatamente 7 dígitos')
+    erroBox.innerHTML = 'Digite exatamente 7 dígitos'
+    inputEl.style.border = '2px solid red'
     return
   }
 
-  voterId = input
-  document.getElementById('modalVoter').style.display = 'none'
+  fetch(`${BASE_URL}/api/check-voter/${input}/${ELECTION_ID}`)
+    .then(res => res.json())
+    .then(data => {
+
+      if (data.used) {
+        erroBox.innerHTML = 'Esse código já foi utilizado!'
+        inputEl.style.border = '2px solid red'
+        return
+      }
+
+      voterId = input
+      document.getElementById('modalVoter').style.display = 'none'
+    })
+    .catch(() => {
+      erroBox.innerHTML = 'Erro ao verificar código'
+      inputEl.style.border = '2px solid red'
+    })
 }
 // ==============================
 // INICIAR ETAPA
