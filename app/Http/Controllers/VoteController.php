@@ -14,6 +14,7 @@ class VoteController extends Controller
 {
     Log::info('📥 Requisição recebida', $request->all());
 
+
     $request->validate([
         'election_id' => 'required',
         'voter_id' => ['required', 'regex:/^[0-9]{7}$/'],

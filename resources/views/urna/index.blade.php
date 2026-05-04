@@ -153,13 +153,82 @@
     <button id="btnConfirmar" onclick="confirmarVoter()">Confirmar</button>
   </div>
 </div>
-<div id="modalAviso" class="modal" style="display:none;">
-  <div class="modal-content">
-    <h2>Atenção</h2>
-    <p>Digite um número, vote nulo ou em branco.</p>
-    <button onclick="fecharAviso()">OK</button>
+<div id="modalAviso" class="modal" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+">
+  <div class="modal-content" style="
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    width:300px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    font-family:Arial;
+  ">
+    <h2 style="margin-bottom:10px;">Atenção</h2>
+    <p style="margin-bottom:20px;">Digite um número, vote nulo ou em branco.</p>
+    <button onclick="fecharAviso()" style="
+      padding:10px 20px;
+      background:#d9534f;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:bold;
+    ">
+      OK
+    </button>
   </div>
 </div>
-</body>
+
+<div id="modalBoasVindas" class="modal" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+">
+  <div class="modal-content" style="
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    width:320px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    font-family:Arial;
+  ">
+    <h2 style="margin-bottom:10px; color:#28a745;">Bem-vindo(a)</h2>
+    <p id="nomeVoter" style="
+      margin-bottom:20px;
+      font-size:16px;
+      font-weight:bold;
+    "></p>
+    <button onclick="fecharBoasVindas()" style="
+      padding:10px 20px;
+      background:#28a745;
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:bold;
+    ">
+      Continuar
+    </button>
+  </div>
+</div>
 
 </html>

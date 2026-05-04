@@ -92,37 +92,75 @@ document.addEventListener('keydown', (e) => {
 
 })
 function confirmarVoter() {
-  let inputEl = document.getElementById('inputVoter')
-  let input = inputEl.value
-  let erroBox = document.getElementById('erroVoter')
+    const matricula = document.getElementById('inputVoter').value.trim();
+    const erroBox = document.getElementById('erroVoter');
+    const input = document.getElementById('inputVoter');
 
-  // limpa erro anterior
-  erroBox.innerHTML = ''
-  inputEl.style.border = ''
+    erroBox.innerText = '';
 
-  if (!/^[0-9]{7}$/.test(input)) {
-    erroBox.innerHTML = 'Digite exatamente 7 dígitos'
-    inputEl.style.border = '2px solid red'
-    return
-  }
+    if (!matricula || matricula.length !== 7) {
+        erroBox.innerText = 'Digite uma matrícula válida (7 dígitos)';
+        input.focus();
+        return;
+    }
 
-  fetch(`${BASE_URL}/api/check-voter/${input}/${ELECTION_ID}`)
-    .then(res => res.json())
+    fetch(BASE_URL + '/api/check-voter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+            registration: matricula,
+            election_id: ELECTION_ID
+        })
+    })
+    .then(async res => {
+        const text = await res.text();
+
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('Resposta inválida:', text);
+            erroBox.innerText = 'Erro no servidor.';
+            throw e;
+        }
+    })
     .then(data => {
 
-      if (data.used) {
-        erroBox.innerHTML = 'Esse código já foi utilizado!'
-        inputEl.style.border = '2px solid red'
-        return
-      }
+        if (!data.success) {
+            erroBox.innerText = data.message;
+            input.focus();
+            return;
+        }
 
-      voterId = input
-      document.getElementById('modalVoter').style.display = 'none'
+        // 🚫 JÁ VOTOU → MOSTRA NO MESMO MODAL
+        if (data.used) {
+            erroBox.innerText = '⚠️ Você já votou nesta eleição.';
+            input.value = '';
+            input.focus();
+            return; // 🔒 NÃO AVANÇA
+        }
+
+        // ✅ OK
+        voterId = data.registration;
+
+        document.getElementById('modalVoter').style.display = 'none';
+
+        abrirBoasVindas(`Olá, ${data.name}!`);
     })
-    .catch(() => {
-      erroBox.innerHTML = 'Erro ao verificar código'
-      inputEl.style.border = '2px solid red'
-    })
+    .catch(err => {
+        console.error(err);
+        erroBox.innerText = 'Erro ao conectar com o servidor';
+    });
+}
+function abrirBoasVindas(nome) {
+    document.getElementById('nomeVoter').innerText = nome;
+    document.getElementById('modalBoasVindas').style.display = 'flex';
+}
+
+function fecharBoasVindas() {
+    document.getElementById('modalBoasVindas').style.display = 'none';
 }
 // ==============================
 // INICIAR ETAPA
