@@ -1,6 +1,5 @@
 {{-- resources/views/votes/monitor.blade.php --}}
-
-@extends('adminlte::page')
+@extends('layouts.app')
 
 @section('title', 'Monitor de Votação')
 
