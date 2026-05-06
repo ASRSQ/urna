@@ -28,9 +28,13 @@ class Vote extends Model
         return $this->belongsTo(Ticket::class);
     }
 public function voter()
-    {
-        return $this->belongsTo(Voter::class);
-    }
+{
+    return $this->belongsTo(
+        Voter::class,
+        'voter_id',
+        'registration'
+    );
+}
     // 🧠 Scope: votos válidos
     public function scopeValid($query)
     {
