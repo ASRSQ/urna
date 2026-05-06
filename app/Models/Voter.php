@@ -10,4 +10,8 @@ class Voter extends Model
         'name',
         'registration'
     ];
+    public function voter()
+{
+    return $this->belongsTo(Voter::class);
+}
 }

@@ -6,10 +6,12 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\Api\ElectionApiController;
 use App\Http\Controllers\UrnaController;
+use App\Http\Controllers\VoteMonitorController;
 
 // eleições
 Route::resource('elections', ElectionController::class);
-
+Route::get('/elections/{id}/monitor', [VoteMonitorController::class, 'index'])
+    ->name('votes.monitor');
 // chapas
 Route::post('/election/{id}/tickets', [TicketController::class, 'store']);
 Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);
@@ -46,3 +48,5 @@ Route::post('/api/check-voter', function (\Illuminate\Http\Request $request) {
         'registration' => $voter->registration // 👈 matrícula
     ]);
 });
+
+
