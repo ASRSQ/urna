@@ -222,7 +222,7 @@ function atualizarInterface() {
   let candidato = etapa.candidatos[numeroDigitado]
 
   if (candidato) {
-
+   console.log(candidato)
     rNome.innerHTML = candidato.nome
      rCargo.innerHTML = candidato.name || 'CHAPA'
      console.log(candidato.name )
