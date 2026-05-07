@@ -44,7 +44,7 @@
 
             <div class="rotulo r2">
     <span id="cargo" style="
-        font-size: 32px;
+        font-size: 20px;
         font-weight: bold;
         text-transform: uppercase;
     ">

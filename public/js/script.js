@@ -224,7 +224,7 @@ function atualizarInterface() {
   if (candidato) {
    console.log(candidato)
     rNome.innerHTML = candidato.nome
-     rCargo.innerHTML = candidato.name || 'CHAPA'
+    rCargo.innerHTML = 'CHAPA ' + candidato.name
      console.log(candidato.name )
 
     // FOTO LÍDER
