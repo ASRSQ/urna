@@ -225,6 +225,7 @@ function atualizarInterface() {
 
     rNome.innerHTML = candidato.nome
      rCargo.innerHTML = candidato.name || 'CHAPA'
+     console.log(candidato.name )
 
     // FOTO LÍDER
     imgCandidato.src = candidato.foto
