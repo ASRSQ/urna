@@ -18,14 +18,27 @@ class ElectionApiController extends Controller
         ];
 
         foreach ($election->tickets as $ticket) {
+
             $etapa['candidatos'][$ticket->number] = [
-                'id' => $ticket->id, // 🔥 ESSENCIAL
+
+                // ID DA CHAPA
+                'id' => $ticket->id,
+
+                // NOME DA CHAPA
+                'name' => $ticket->name,
+
+                // LÍDER
                 'nome' => $ticket->leader_name,
+
+                // FOTO LÍDER
                 'foto' => $ticket->leader_photo,
+
+                // VICE
                 'vice' => $ticket->vice_name ? [
                     'nome' => $ticket->vice_name,
                     'foto' => $ticket->vice_photo
                 ] : null
+
             ];
         }
 
