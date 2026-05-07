@@ -16,6 +16,7 @@
     <thead class="table-dark">
         <tr>
             <th>Número</th>
+            <th>Chapa</th>
             <th>Líder</th>
             <th>Vice</th>
             <th>Fotos</th>
@@ -24,23 +25,42 @@
     <tbody>
         @forelse($election->tickets as $ticket)
         <tr>
-            <td><strong>{{ $ticket->number }}</strong></td>
-            <td>{{ $ticket->leader_name }}</td>
-            <td>{{ $ticket->vice_name ?? '-' }}</td>
+            <td>
+                <strong>{{ $ticket->number }}</strong>
+            </td>
+
+            <td>
+                {{ $ticket->name }}
+            </td>
+
+            <td>
+                {{ $ticket->leader_name }}
+            </td>
+
+            <td>
+                {{ $ticket->vice_name ?? '-' }}
+            </td>
 
             <td>
                 @if($ticket->leader_photo)
-                    <img src="{{ asset('storage/'.$ticket->leader_photo) }}" width="40" class="me-1">
+                    <img 
+                        src="{{ asset('storage/'.$ticket->leader_photo) }}" 
+                        width="40" 
+                        class="me-1"
+                    >
                 @endif
 
                 @if($ticket->vice_photo)
-                    <img src="{{ asset('storage/'.$ticket->vice_photo) }}" width="40">
+                    <img 
+                        src="{{ asset('storage/'.$ticket->vice_photo) }}" 
+                        width="40"
+                    >
                 @endif
             </td>
         </tr>
         @empty
         <tr>
-            <td colspan="4" class="text-center text-muted">
+            <td colspan="5" class="text-center text-muted">
                 Nenhuma chapa cadastrada
             </td>
         </tr>
@@ -60,6 +80,18 @@
 
     <div class="row g-2">
 
+        <!-- NOME DA CHAPA -->
+        <div class="col-md-4">
+            <input 
+                type="text" 
+                name="name" 
+                class="form-control" 
+                placeholder="Nome da Chapa"
+                required
+            >
+        </div>
+
+        <!-- NÚMERO -->
         <div class="col-md-2">
             <input 
                 type="text" 
@@ -70,7 +102,8 @@
             >
         </div>
 
-        <div class="col-md-4">
+        <!-- LÍDER -->
+        <div class="col-md-3">
             <input 
                 type="text" 
                 name="leader_name" 
@@ -80,7 +113,8 @@
             >
         </div>
 
-        <div class="col-md-4">
+        <!-- VICE -->
+        <div class="col-md-3">
             <input 
                 type="text" 
                 name="vice_name" 
@@ -89,8 +123,12 @@
             >
         </div>
 
+        <!-- FOTO LÍDER -->
         <div class="col-md-4 mt-2">
-            <label class="form-label">Foto do Líder</label>
+            <label class="form-label">
+                Foto do Líder
+            </label>
+
             <input 
                 type="file" 
                 name="leader_photo" 
@@ -98,8 +136,12 @@
             >
         </div>
 
+        <!-- FOTO VICE -->
         <div class="col-md-4 mt-2">
-            <label class="form-label">Foto do Vice</label>
+            <label class="form-label">
+                Foto do Vice
+            </label>
+
             <input 
                 type="file" 
                 name="vice_photo" 
@@ -110,14 +152,18 @@
     </div>
 
     <div class="mt-3 d-flex gap-2">
+
         <button class="btn btn-primary">
             ➕ Adicionar
         </button>
 
-        <a href="{{ route('elections.index') }}" class="btn btn-secondary">
-            ← Voltar
+        <a href="{{ route('elections.index') }}" 
+           class="btn btn-secondary">
+           ← Voltar
         </a>
+
     </div>
+
 </form>
 
 @endsection

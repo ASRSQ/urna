@@ -224,6 +224,7 @@ function atualizarInterface() {
   if (candidato) {
 
     rNome.innerHTML = candidato.nome
+     rCargo.innerHTML = candidato.name || 'CHAPA'
 
     // FOTO LÍDER
     imgCandidato.src = candidato.foto

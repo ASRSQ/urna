@@ -43,8 +43,14 @@
             </div>
 
             <div class="rotulo r2">
-              <span id="cargo">CHAPA</span>
-            </div>
+    <span id="cargo" style="
+        font-size: 32px;
+        font-weight: bold;
+        text-transform: uppercase;
+    ">
+        ---
+    </span>
+</div>
 
             <div class="rotulo r3"></div>
 

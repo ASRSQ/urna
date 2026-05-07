@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ElectionApiController;
 use App\Http\Controllers\UrnaController;
 use App\Http\Controllers\VoteMonitorController;
 
+
 // eleições
 Route::resource('elections', ElectionController::class);
 Route::get('/elections/{id}/monitor', [VoteMonitorController::class, 'index'])
