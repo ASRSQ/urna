@@ -75,57 +75,48 @@
   margin-bottom: 12px;
 }
 
-.tela .principal .menor {
-  width: 85%;
-  font-size: 0.8rem;
-}
-
-/* CAIXA DA FOTO */
+/* FOTO */
 .tela .principal .candidato .imagem {
-  width: 85px;
-  height: 105px;
+  width: 90px;
+  height: 110px;
 
   border: 1px solid #000;
   overflow: hidden;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   background: #fff;
 }
 
-/* FOTO */
+/* IMG */
 .tela .principal .candidato .imagem img {
   width: 100%;
   height: 100%;
 
   object-fit: cover;
-  object-position: center top;
+  object-position: center;
 
   display: block;
 }
 
-/* FOTO DO VICE MENOR */
+/* VICE MENOR */
 .tela .principal .candidato.menor .imagem {
-  width: 70px;
-  height: 85px;
+  width: 75px;
+  height: 90px;
 }
 
-/* TEXO ABAIXO */
+/* LEGENDA */
 .tela .principal .candidato .cargo {
-  background-color: white;
+  background: #fff;
   border: 1px solid #000;
   border-top: none;
-  padding: 2px;
+
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+
+  padding: 2px 0;
 }
 
 .tela .principal .candidato .cargo p {
   margin: 0;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: bold;
 }
 .tela .rodape {
   height: 70px;
